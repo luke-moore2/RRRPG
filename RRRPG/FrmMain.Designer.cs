@@ -24,36 +24,42 @@
     /// </summary>
     private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
       this.picOpponent = new System.Windows.Forms.PictureBox();
       this.picPlayer = new System.Windows.Forms.PictureBox();
       this.btnDoIt = new System.Windows.Forms.Button();
       this.lblPlayer = new System.Windows.Forms.Label();
       this.lblOpponent = new System.Windows.Forms.Label();
-      this.picWeaponSelectWand = new System.Windows.Forms.PictureBox();
-      this.lblWeaponSelected = new System.Windows.Forms.Label();
+      this.picWeaponSelectMagicWand = new System.Windows.Forms.PictureBox();
+      this.lblWeaponSelectMagicWand = new System.Windows.Forms.Label();
       this.panWeaponSelect = new System.Windows.Forms.Panel();
-      this.label2 = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.pictureBox2 = new System.Windows.Forms.PictureBox();
-      this.pictureBox1 = new System.Windows.Forms.PictureBox();
+      this.lblWeaponSelectBow = new System.Windows.Forms.Label();
+      this.picWeaponSelectBow = new System.Windows.Forms.PictureBox();
+      this.lblWeaponSelectNerfRev = new System.Windows.Forms.Label();
+      this.picWeaponSelectNerfRev = new System.Windows.Forms.PictureBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.lblWeaponSelectWaterGun = new System.Windows.Forms.Label();
+      this.lblWeaponSelectCorkGun = new System.Windows.Forms.Label();
+      this.picWeaponSelectWaterGun = new System.Windows.Forms.PictureBox();
+      this.picWeaponSelectCorkGun = new System.Windows.Forms.PictureBox();
       this.btnStart = new System.Windows.Forms.Button();
       this.lblOpponentSpeak = new System.Windows.Forms.Label();
       this.lblPlayerSpeak = new System.Windows.Forms.Label();
-      this.tmrDialog = new System.Windows.Forms.Timer(this.components);
-      this.tmrKillBender = new System.Windows.Forms.Timer(this.components);
-      this.label3 = new System.Windows.Forms.Label();
+      this.tmrStateMachine = new System.Windows.Forms.Timer(this.components);
+      this.tmrPlayMusicAfterGameOver = new System.Windows.Forms.Timer(this.components);
       ((System.ComponentModel.ISupportInitialize)(this.picOpponent)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.picPlayer)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectWand)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectMagicWand)).BeginInit();
       this.panWeaponSelect.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectBow)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectNerfRev)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectWaterGun)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectCorkGun)).BeginInit();
       this.SuspendLayout();
       // 
       // picOpponent
       // 
       this.picOpponent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.picOpponent.Image = global::RRRPG.Properties.Resources.Wizard_With_Wand;
       this.picOpponent.Location = new System.Drawing.Point(525, 120);
       this.picOpponent.Name = "picOpponent";
       this.picOpponent.Size = new System.Drawing.Size(526, 501);
@@ -63,7 +69,7 @@
       // picPlayer
       // 
       this.picPlayer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.picPlayer.Image = global::RRRPG.Properties.Resources.Bender;
+      this.picPlayer.Image = global::RRRPG.Properties.Resources.Img_Bender_Idle;
       this.picPlayer.Location = new System.Drawing.Point(12, 86);
       this.picPlayer.Name = "picPlayer";
       this.picPlayer.Size = new System.Drawing.Size(489, 597);
@@ -103,94 +109,161 @@
       this.lblOpponent.TabIndex = 4;
       this.lblOpponent.Text = "Opponent";
       // 
-      // picWeaponSelectWand
+      // picWeaponSelectMagicWand
       // 
-      this.picWeaponSelectWand.BackColor = System.Drawing.Color.Olive;
-      this.picWeaponSelectWand.BackgroundImage = global::RRRPG.Properties.Resources.Wand;
-      this.picWeaponSelectWand.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-      this.picWeaponSelectWand.Location = new System.Drawing.Point(12, 10);
-      this.picWeaponSelectWand.Name = "picWeaponSelectWand";
-      this.picWeaponSelectWand.Size = new System.Drawing.Size(128, 153);
-      this.picWeaponSelectWand.TabIndex = 5;
-      this.picWeaponSelectWand.TabStop = false;
+      this.picWeaponSelectMagicWand.BackColor = System.Drawing.Color.Black;
+      this.picWeaponSelectMagicWand.BackgroundImage = global::RRRPG.Properties.Resources.Img_Magic_Wand;
+      this.picWeaponSelectMagicWand.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.picWeaponSelectMagicWand.Location = new System.Drawing.Point(12, 10);
+      this.picWeaponSelectMagicWand.Name = "picWeaponSelectMagicWand";
+      this.picWeaponSelectMagicWand.Size = new System.Drawing.Size(128, 153);
+      this.picWeaponSelectMagicWand.TabIndex = 5;
+      this.picWeaponSelectMagicWand.TabStop = false;
+      this.picWeaponSelectMagicWand.Click += new System.EventHandler(this.picWeaponSelectMagicWand_Click);
       // 
-      // lblWeaponSelected
+      // lblWeaponSelectMagicWand
       // 
-      this.lblWeaponSelected.AutoSize = true;
-      this.lblWeaponSelected.BackColor = System.Drawing.Color.Black;
-      this.lblWeaponSelected.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.lblWeaponSelected.ForeColor = System.Drawing.Color.White;
-      this.lblWeaponSelected.Location = new System.Drawing.Point(46, 166);
-      this.lblWeaponSelected.Name = "lblWeaponSelected";
-      this.lblWeaponSelected.Size = new System.Drawing.Size(57, 21);
-      this.lblWeaponSelected.TabIndex = 6;
-      this.lblWeaponSelected.Text = "Magic";
+      this.lblWeaponSelectMagicWand.AutoSize = true;
+      this.lblWeaponSelectMagicWand.BackColor = System.Drawing.Color.Black;
+      this.lblWeaponSelectMagicWand.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.lblWeaponSelectMagicWand.ForeColor = System.Drawing.Color.White;
+      this.lblWeaponSelectMagicWand.Location = new System.Drawing.Point(46, 166);
+      this.lblWeaponSelectMagicWand.Name = "lblWeaponSelectMagicWand";
+      this.lblWeaponSelectMagicWand.Size = new System.Drawing.Size(57, 21);
+      this.lblWeaponSelectMagicWand.TabIndex = 6;
+      this.lblWeaponSelectMagicWand.Text = "Magic";
       // 
       // panWeaponSelect
       // 
       this.panWeaponSelect.BackColor = System.Drawing.Color.Black;
+      this.panWeaponSelect.Controls.Add(this.lblWeaponSelectBow);
+      this.panWeaponSelect.Controls.Add(this.picWeaponSelectBow);
+      this.panWeaponSelect.Controls.Add(this.lblWeaponSelectNerfRev);
+      this.panWeaponSelect.Controls.Add(this.picWeaponSelectNerfRev);
       this.panWeaponSelect.Controls.Add(this.label3);
-      this.panWeaponSelect.Controls.Add(this.label2);
-      this.panWeaponSelect.Controls.Add(this.label1);
-      this.panWeaponSelect.Controls.Add(this.pictureBox2);
-      this.panWeaponSelect.Controls.Add(this.pictureBox1);
-      this.panWeaponSelect.Controls.Add(this.picWeaponSelectWand);
-      this.panWeaponSelect.Controls.Add(this.lblWeaponSelected);
-      this.panWeaponSelect.Location = new System.Drawing.Point(687, 636);
+      this.panWeaponSelect.Controls.Add(this.lblWeaponSelectWaterGun);
+      this.panWeaponSelect.Controls.Add(this.lblWeaponSelectCorkGun);
+      this.panWeaponSelect.Controls.Add(this.picWeaponSelectWaterGun);
+      this.panWeaponSelect.Controls.Add(this.picWeaponSelectCorkGun);
+      this.panWeaponSelect.Controls.Add(this.picWeaponSelectMagicWand);
+      this.panWeaponSelect.Controls.Add(this.lblWeaponSelectMagicWand);
+      this.panWeaponSelect.Location = new System.Drawing.Point(507, 636);
       this.panWeaponSelect.Name = "panWeaponSelect";
-      this.panWeaponSelect.Size = new System.Drawing.Size(367, 229);
+      this.panWeaponSelect.Size = new System.Drawing.Size(566, 229);
       this.panWeaponSelect.TabIndex = 7;
       // 
-      // label2
+      // lblWeaponSelectBow
       // 
-      this.label2.AutoSize = true;
-      this.label2.BackColor = System.Drawing.Color.Black;
-      this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.label2.ForeColor = System.Drawing.Color.White;
-      this.label2.Location = new System.Drawing.Point(258, 165);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(90, 21);
-      this.label2.TabIndex = 10;
-      this.label2.Text = "Water Gun";
+      this.lblWeaponSelectBow.AutoSize = true;
+      this.lblWeaponSelectBow.BackColor = System.Drawing.Color.Black;
+      this.lblWeaponSelectBow.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.lblWeaponSelectBow.ForeColor = System.Drawing.Color.White;
+      this.lblWeaponSelectBow.Location = new System.Drawing.Point(500, 166);
+      this.lblWeaponSelectBow.Name = "lblWeaponSelectBow";
+      this.lblWeaponSelectBow.Size = new System.Drawing.Size(43, 21);
+      this.lblWeaponSelectBow.TabIndex = 15;
+      this.lblWeaponSelectBow.Text = "Bow";
       // 
-      // label1
+      // picWeaponSelectBow
       // 
-      this.label1.AutoSize = true;
-      this.label1.BackColor = System.Drawing.Color.Black;
-      this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.label1.ForeColor = System.Drawing.Color.White;
-      this.label1.Location = new System.Drawing.Point(156, 165);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(80, 21);
-      this.label1.TabIndex = 9;
-      this.label1.Text = "Cork Gun";
+      this.picWeaponSelectBow.BackColor = System.Drawing.Color.Black;
+      this.picWeaponSelectBow.BackgroundImage = global::RRRPG.Properties.Resources.Img_Bow;
+      this.picWeaponSelectBow.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.picWeaponSelectBow.Location = new System.Drawing.Point(466, 11);
+      this.picWeaponSelectBow.Name = "picWeaponSelectBow";
+      this.picWeaponSelectBow.Size = new System.Drawing.Size(100, 152);
+      this.picWeaponSelectBow.TabIndex = 14;
+      this.picWeaponSelectBow.TabStop = false;
+      this.picWeaponSelectBow.Click += new System.EventHandler(this.picWeaponSelectBow_Click);
       // 
-      // pictureBox2
+      // lblWeaponSelectNerfRev
       // 
-      this.pictureBox2.BackColor = System.Drawing.Color.Black;
-      this.pictureBox2.BackgroundImage = global::RRRPG.Properties.Resources.water_gun;
-      this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-      this.pictureBox2.Location = new System.Drawing.Point(252, 10);
-      this.pictureBox2.Name = "pictureBox2";
-      this.pictureBox2.Size = new System.Drawing.Size(100, 152);
-      this.pictureBox2.TabIndex = 8;
-      this.pictureBox2.TabStop = false;
+      this.lblWeaponSelectNerfRev.AutoSize = true;
+      this.lblWeaponSelectNerfRev.BackColor = System.Drawing.Color.Black;
+      this.lblWeaponSelectNerfRev.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.lblWeaponSelectNerfRev.ForeColor = System.Drawing.Color.White;
+      this.lblWeaponSelectNerfRev.Location = new System.Drawing.Point(351, 166);
+      this.lblWeaponSelectNerfRev.Name = "lblWeaponSelectNerfRev";
+      this.lblWeaponSelectNerfRev.Size = new System.Drawing.Size(115, 21);
+      this.lblWeaponSelectNerfRev.TabIndex = 13;
+      this.lblWeaponSelectNerfRev.Text = "Nerf Revolver";
       // 
-      // pictureBox1
+      // picWeaponSelectNerfRev
       // 
-      this.pictureBox1.BackColor = System.Drawing.Color.Black;
-      this.pictureBox1.BackgroundImage = global::RRRPG.Properties.Resources.cork_gun;
-      this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-      this.pictureBox1.Location = new System.Drawing.Point(146, 10);
-      this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(100, 152);
-      this.pictureBox1.TabIndex = 7;
-      this.pictureBox1.TabStop = false;
+      this.picWeaponSelectNerfRev.BackColor = System.Drawing.Color.Black;
+      this.picWeaponSelectNerfRev.BackgroundImage = global::RRRPG.Properties.Resources.Img_Nerf_Revolver;
+      this.picWeaponSelectNerfRev.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.picWeaponSelectNerfRev.Location = new System.Drawing.Point(358, 11);
+      this.picWeaponSelectNerfRev.Name = "picWeaponSelectNerfRev";
+      this.picWeaponSelectNerfRev.Size = new System.Drawing.Size(100, 152);
+      this.picWeaponSelectNerfRev.TabIndex = 12;
+      this.picWeaponSelectNerfRev.TabStop = false;
+      this.picWeaponSelectNerfRev.Click += new System.EventHandler(this.picWeaponSelectNerfRev_Click);
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.label3.ForeColor = System.Drawing.Color.Silver;
+      this.label3.Location = new System.Drawing.Point(206, 195);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(158, 30);
+      this.label3.TabIndex = 11;
+      this.label3.Text = "Weapon Select";
+      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // lblWeaponSelectWaterGun
+      // 
+      this.lblWeaponSelectWaterGun.AutoSize = true;
+      this.lblWeaponSelectWaterGun.BackColor = System.Drawing.Color.Black;
+      this.lblWeaponSelectWaterGun.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.lblWeaponSelectWaterGun.ForeColor = System.Drawing.Color.White;
+      this.lblWeaponSelectWaterGun.Location = new System.Drawing.Point(258, 165);
+      this.lblWeaponSelectWaterGun.Name = "lblWeaponSelectWaterGun";
+      this.lblWeaponSelectWaterGun.Size = new System.Drawing.Size(90, 21);
+      this.lblWeaponSelectWaterGun.TabIndex = 10;
+      this.lblWeaponSelectWaterGun.Text = "Water Gun";
+      // 
+      // lblWeaponSelectCorkGun
+      // 
+      this.lblWeaponSelectCorkGun.AutoSize = true;
+      this.lblWeaponSelectCorkGun.BackColor = System.Drawing.Color.Black;
+      this.lblWeaponSelectCorkGun.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.lblWeaponSelectCorkGun.ForeColor = System.Drawing.Color.White;
+      this.lblWeaponSelectCorkGun.Location = new System.Drawing.Point(156, 165);
+      this.lblWeaponSelectCorkGun.Name = "lblWeaponSelectCorkGun";
+      this.lblWeaponSelectCorkGun.Size = new System.Drawing.Size(80, 21);
+      this.lblWeaponSelectCorkGun.TabIndex = 9;
+      this.lblWeaponSelectCorkGun.Text = "Cork Gun";
+      // 
+      // picWeaponSelectWaterGun
+      // 
+      this.picWeaponSelectWaterGun.BackColor = System.Drawing.Color.Black;
+      this.picWeaponSelectWaterGun.BackgroundImage = global::RRRPG.Properties.Resources.Img_Water_Gun;
+      this.picWeaponSelectWaterGun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.picWeaponSelectWaterGun.Location = new System.Drawing.Point(252, 10);
+      this.picWeaponSelectWaterGun.Name = "picWeaponSelectWaterGun";
+      this.picWeaponSelectWaterGun.Size = new System.Drawing.Size(100, 152);
+      this.picWeaponSelectWaterGun.TabIndex = 8;
+      this.picWeaponSelectWaterGun.TabStop = false;
+      this.picWeaponSelectWaterGun.Click += new System.EventHandler(this.picWeaponSelectWaterGun_Click);
+      // 
+      // picWeaponSelectCorkGun
+      // 
+      this.picWeaponSelectCorkGun.BackColor = System.Drawing.Color.Black;
+      this.picWeaponSelectCorkGun.BackgroundImage = global::RRRPG.Properties.Resources.Img_Cork_Gun;
+      this.picWeaponSelectCorkGun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+      this.picWeaponSelectCorkGun.Location = new System.Drawing.Point(146, 10);
+      this.picWeaponSelectCorkGun.Name = "picWeaponSelectCorkGun";
+      this.picWeaponSelectCorkGun.Size = new System.Drawing.Size(100, 152);
+      this.picWeaponSelectCorkGun.TabIndex = 7;
+      this.picWeaponSelectCorkGun.TabStop = false;
+      this.picWeaponSelectCorkGun.Click += new System.EventHandler(this.picWeaponSelectCorkGun_Click);
       // 
       // btnStart
       // 
       this.btnStart.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.btnStart.Location = new System.Drawing.Point(314, 740);
+      this.btnStart.Location = new System.Drawing.Point(212, 768);
       this.btnStart.Name = "btnStart";
       this.btnStart.Size = new System.Drawing.Size(225, 70);
       this.btnStart.TabIndex = 8;
@@ -220,27 +293,15 @@
       this.lblPlayerSpeak.TabIndex = 10;
       this.lblPlayerSpeak.Text = "Bite my shiny metal ass!";
       // 
-      // tmrDialog
+      // tmrStateMachine
       // 
-      this.tmrDialog.Interval = 40;
-      this.tmrDialog.Tick += new System.EventHandler(this.tmrDialog_Tick);
+      this.tmrStateMachine.Interval = 40;
+      this.tmrStateMachine.Tick += new System.EventHandler(this.tmrDialog_Tick);
       // 
-      // tmrKillBender
+      // tmrPlayMusicAfterGameOver
       // 
-      this.tmrKillBender.Interval = 1500;
-      this.tmrKillBender.Tick += new System.EventHandler(this.tmrKillBender_Tick);
-      // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.label3.ForeColor = System.Drawing.Color.Silver;
-      this.label3.Location = new System.Drawing.Point(125, 195);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(158, 30);
-      this.label3.TabIndex = 11;
-      this.label3.Text = "Weapon Select";
-      this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.tmrPlayMusicAfterGameOver.Interval = 2000;
+      this.tmrPlayMusicAfterGameOver.Tick += new System.EventHandler(this.tmrPlayMusicAfterGameOver_Tick);
       // 
       // FrmMain
       // 
@@ -257,16 +318,20 @@
       this.Controls.Add(this.btnDoIt);
       this.Controls.Add(this.picPlayer);
       this.Controls.Add(this.picOpponent);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "FrmMain";
-      this.Text = "Russian Roulette";
+      this.Text = "Russian Roulette RPG";
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmMain_FormClosed);
       this.Load += new System.EventHandler(this.FrmMain_Load);
       ((System.ComponentModel.ISupportInitialize)(this.picOpponent)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.picPlayer)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectWand)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectMagicWand)).EndInit();
       this.panWeaponSelect.ResumeLayout(false);
       this.panWeaponSelect.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectBow)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectNerfRev)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectWaterGun)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picWeaponSelectCorkGun)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -279,18 +344,22 @@
     private Button btnDoIt;
     private Label lblPlayer;
     private Label lblOpponent;
-    private PictureBox picWeaponSelectWand;
-    private Label lblWeaponSelected;
+    private PictureBox picWeaponSelectMagicWand;
+    private Label lblWeaponSelectMagicWand;
     private Panel panWeaponSelect;
     private Button btnStart;
     private Label lblOpponentSpeak;
     private Label lblPlayerSpeak;
-    private System.Windows.Forms.Timer tmrDialog;
-    private System.Windows.Forms.Timer tmrKillBender;
-    private PictureBox pictureBox1;
-    private Label label2;
-    private Label label1;
-    private PictureBox pictureBox2;
+    private System.Windows.Forms.Timer tmrStateMachine;
+    private PictureBox picWeaponSelectCorkGun;
+    private Label lblWeaponSelectWaterGun;
+    private Label lblWeaponSelectCorkGun;
+    private PictureBox picWeaponSelectWaterGun;
     private Label label3;
+    private Label lblWeaponSelectBow;
+    private PictureBox picWeaponSelectBow;
+    private Label lblWeaponSelectNerfRev;
+    private PictureBox picWeaponSelectNerfRev;
+    private System.Windows.Forms.Timer tmrPlayMusicAfterGameOver;
   }
 }
