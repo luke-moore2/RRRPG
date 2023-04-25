@@ -1,4 +1,5 @@
 ﻿using RRRPG.Properties;
+using RRRPGLib;
 using System.Media;
 
 namespace RRRPG;
@@ -10,6 +11,7 @@ public partial class FrmTitle : Form {
   }
 
   private void btnPlay_Click(object sender, EventArgs e) {
+    ResourcesRef.Resources = Resources.ResourceManager;
     Hide();
     soundPlayer.Stop();
     FrmMain frmMain = new FrmMain();
