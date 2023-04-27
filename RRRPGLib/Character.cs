@@ -1,43 +1,59 @@
-﻿using System.Windows.Forms;
-using System.Drawing;
-using ImgState = RRRPG.CharacterImgStateType;
-using TalkState = RRRPG.CharacterTalkStateType;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using static RRRPGLib.ResourcesRef;
+using ImgState = RRRPGLib.CharacterImgStateType;
+using TalkState = RRRPGLib.CharacterTalkStateType;
 
-namespace RRRPG;
+namespace RRRPGLib;
 
-public enum CharacterImgStateType {
-  IDLE,
-  NO_WEAPON,
-  READY,
-  KILL
-}
-
-public enum CharacterTalkStateType {
-  TALK_SMACK,
-  SAY_OW,
-  BONED,
-  GUN_WENT_OFF,
-  SURVIVED
-}
-
+/// <summary>
+/// Standard class for creating a character
+/// </summary>
 public class Character {
-  private FortitudeType fortitude;
+  #region Public Fields / Properties
+  /// <summary>
+  /// Holds the stats for this character
+  /// </summary>
   public Stats Stats { get; private set; }
+  #endregion
+
+  #region Private Fields / Properties
+  private FortitudeType fortitude;
   private PictureBox pic;
   private Label lblTalk;
   private Dictionary<ImgState, Bitmap> imgMap;
   private Dictionary<TalkState, (string dialog, UnmanagedMemoryStream audio)> dialogMap;
+  #endregion
 
+  #region Constructor
+  /// <summary>
+  /// Default constructor that just calls the explicit constructor
+  /// sending it null for the arguments
+  /// </summary>
   public Character() : this(null, null) {
 
   }
+
+  /// <summary>
+  /// Explicit constructor
+  /// </summary>
+  /// <param name="pic">Holds the picture box for the character</param>
+  /// <param name="lblTalk">Holds the label to contain character's dialog</param>
   public Character(PictureBox pic, Label lblTalk) {
     this.pic = pic;
     this.lblTalk = lblTalk;
     this.fortitude = FortitudeType.NORMAL;
   }
+  #endregion
 
+  #region Public Methods
+  /// <summary>
+  /// Create an opponent suitable for the given weapon
+  /// </summary>
+  /// <param name="weaponType">Type of weapon to create the opponent for</param>
+  /// <param name="pic">PictureBox to hold the image of the opponent</param>
+  /// <param name="lblTalk">Label to hold the opponent's dialog</param>
+  /// <returns>The opponent created</returns>
   public static Character MakeOpponent(WeaponType weaponType, PictureBox pic, Label lblTalk) {
     Character c = weaponType switch {
       WeaponType.MAGIC_WAND => MakeMagicWandOpponent(),
@@ -52,6 +68,108 @@ public class Character {
     c.Shutup();
     return c;
   }
+
+  /// <summary>
+  /// Create a player with the appropriate animations and dialog for the given weapon
+  /// </summary>
+  /// <param name="weaponType">Type of weapon to create the player for</param>
+  /// <param name="pic">PictureBox to hold the image of the player</param>
+  /// <param name="lblTalk">Label to hold the player's dialog</param>
+  /// <returns></returns>
+  public static Character MakePlayer(WeaponType weaponType, PictureBox pic, Label lblTalk) {
+    Character c = weaponType switch {
+      WeaponType.MAGIC_WAND => MakeMagicWandPlayer(),
+      WeaponType.NERF_REVOLVER => MakeNerfRevolverPlayer(),
+      WeaponType.BOW => MakeBowPlayer(),
+      WeaponType.CORK_GUN => MakeCorkGunPlayer(),
+      WeaponType.WATER_GUN => MakeWaterGunPlayer(),
+    };
+    c.pic = pic;
+    c.lblTalk = lblTalk;
+    c.ShowIdle();
+    c.Shutup();
+    return c;
+  }
+
+  /// <summary>
+  /// Handles what happens when the character pulls the trigger of the weapon
+  /// </summary>
+  /// <param name="weapon">Weapon in play</param>
+  /// <returns>True if the character got shot, false otherwise</returns>
+  public bool PullTrigger(Weapon weapon) {
+    var result = weapon.PullTrigger(this);
+    //Say(result.ToString());
+    switch (result) {
+      case PullTriggerResult.GOT_SHOT:
+        ShowKill();
+        SayGunWentOff();
+        return true;
+      case PullTriggerResult.MISFIRE:
+      case PullTriggerResult.WENT_OFF_BUT_DODGED:
+      case PullTriggerResult.DIDNT_GO_OFF:
+        ShowNoWeapon();
+        SaySurvived();
+        return false;
+    }
+    return false;
+  }
+
+  /// <summary>
+  /// Allows the character to say the dialog that goes with the <see cref="TalkState.TALK_SMACK"/> state
+  /// </summary>
+  public void SaySmack() => Say(dialogMap[TalkState.TALK_SMACK]);
+
+  /// <summary>
+  /// Allows the character to say the dialog that goes with the <see cref="TalkState.SAY_OW"/> state
+  /// </summary>
+  public void SayOw() => Say(dialogMap[TalkState.SAY_OW]);
+
+  /// <summary>
+  /// Allows the character to say the dialog that goes with the <see cref="TalkState.BONED"/> state
+  /// </summary>
+  public void SayBoned() => Say(dialogMap[TalkState.BONED]);
+
+  /// <summary>
+  /// Allows the character to say the dialog that goes with the <see cref="TalkState.GUN_WENT_OFF"/> state
+  /// </summary>
+  public void SayGunWentOff() => Say(dialogMap[TalkState.GUN_WENT_OFF]);
+
+  /// <summary>
+  /// Allows the character to say the dialog that goes with the <see cref="TalkState.SURVIVED"/> state
+  /// </summary>
+  public void SaySurvived() => Say(dialogMap[TalkState.SURVIVED]);
+
+  /// <summary>
+  /// Temporarily stops the character from talking and hides their dialog label
+  /// </summary>
+  public void Shutup() {
+    lblTalk.Text = "";
+    lblTalk.Visible = false;
+  }
+
+  /// <summary>
+  /// Allows the character to show the animation/image that goes with the <see cref="ImgState.IDLE"/> state
+  /// </summary>
+  public void ShowIdle() => Show(imgMap[ImgState.IDLE]);
+
+  /// <summary>
+  /// Allows the character to show the animation/image that goes with the <see cref="ImgState.NO_WEAPON"/> state
+  /// </summary>
+  public void ShowNoWeapon() => Show(imgMap[ImgState.NO_WEAPON]);
+
+  /// <summary>
+  /// Allows the character to show the animation/image that goes with the <see cref="ImgState.READY"/> state
+  /// </summary>
+  public void ShowReady() => Show(imgMap[ImgState.READY]);
+
+  /// <summary>
+  /// Allows the character to show the animation/image that goes with the <see cref="ImgState.KILL"/> state
+  /// </summary>
+  public void ShowKill() => Show(imgMap[ImgState.KILL]);
+
+  #endregion
+
+  #region Private Methods
   private static Character MakeWaterGunOpponent() {
     Character c = new Character();
     c.Stats = new(luck: 0.7f, health: 100, reflex: 0.3f);
@@ -61,6 +179,7 @@ public class Character {
       {ImgState.READY, Resources.GetObject("Img_FireGoblin_Ready") as Bitmap },
       {ImgState.KILL, Resources.GetObject("Img_FireGoblin_Kill") as Bitmap },
     };
+    // create dialog map
     c.dialogMap = new() {
       {TalkState.TALK_SMACK, ("Why did I choose a water gun?", null) },
       {TalkState.SAY_OW, ("Ow", null) },
@@ -143,20 +262,6 @@ public class Character {
     return c;
   }
 
-  public static Character MakePlayer(WeaponType weaponType, PictureBox pic, Label lblTalk) {
-    Character c = weaponType switch {
-      WeaponType.MAGIC_WAND => MakeMagicWandPlayer(),
-      WeaponType.NERF_REVOLVER => MakeNerfRevolverPlayer(),
-      WeaponType.BOW => MakeBowPlayer(),
-      WeaponType.CORK_GUN => MakeCorkGunPlayer(),
-      WeaponType.WATER_GUN => MakeWaterGunPlayer(),
-    };
-    c.pic = pic;
-    c.lblTalk = lblTalk;
-    c.ShowIdle();
-    c.Shutup();
-    return c;
-  }
   private static Character MakeMagicWandPlayer() {
     Character c = new Character();
     c.Stats = new(luck: 0.5f, health: 100, reflex: 0.3f);
@@ -247,12 +352,7 @@ public class Character {
     };
     return c;
   }
-
-  public void SaySmack() => Say(dialogMap[TalkState.TALK_SMACK]);
-  public void SayOw() => Say(dialogMap[TalkState.SAY_OW]);
-  public void SayBoned() => Say(dialogMap[TalkState.BONED]);
-  public void SayGunWentOff() => Say(dialogMap[TalkState.GUN_WENT_OFF]);
-  public void SaySurvived() => Say(dialogMap[TalkState.SURVIVED]);
+  
   private void Say(string dialog) {
     Say((dialog, null));
   }
@@ -263,35 +363,9 @@ public class Character {
       SoundManager.Play(msg.audio);
     }
   }
-
-  public void Shutup() {
-    lblTalk.Text = "";
-    lblTalk.Visible = false;
-  }
-
-  public void ShowIdle() => Show(imgMap[ImgState.IDLE]);
-  public void ShowNoWeapon() => Show(imgMap[ImgState.NO_WEAPON]);
-  public void ShowReady() => Show(imgMap[ImgState.READY]);
-  public void ShowKill() => Show(imgMap[ImgState.KILL]);
+  
   private void Show(Bitmap img) {
     pic.Image = img;
   }
-
-  public bool PullTrigger(Weapon weapon) {
-    var result = weapon.PullTrigger(this);
-    //Say(result.ToString());
-    switch (result) {
-      case PullTriggerResult.GOT_SHOT:
-        ShowKill();
-        SayGunWentOff();
-        return true;
-      case PullTriggerResult.MISFIRE:
-      case PullTriggerResult.WENT_OFF_BUT_DODGED:
-      case PullTriggerResult.DIDNT_GO_OFF:
-        ShowNoWeapon();
-        SaySurvived();
-        return false;
-    }
-    return false;
-  }
+  #endregion
 }
