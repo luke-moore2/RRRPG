@@ -128,7 +128,11 @@ public class Weapon {
     PullTriggerResult result = PullTriggerResult.UNKNOWN;
 
     float chance = RandNumber();
+<<<<<<< Updated upstream
     if (chance < 1 - character.Stats.Luck) {
+=======
+    if (chance < ((1 - character.Stats.Luck/3)*(BulletsLoaded/(float)Chambers))) {
+>>>>>>> Stashed changes
       chance = RandNumber();
       if (chance >= ChanceOfMisfire) {
         float chanceToDodge = Math.Max(0, character.Stats.Reflex - Velocity);

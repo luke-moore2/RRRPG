@@ -14,11 +14,14 @@ public class Character {
   /// <summary>
   /// Holds the stats for this character
   /// </summary>
-  public Stats Stats { get; private set; }
+  public Stats Stats { get; set; }
   #endregion
 
   #region Private Fields / Properties
-  private FortitudeType fortitude;
+    /// <summary>
+    /// 
+    /// </summary>
+  public FortitudeType fortitude = FortitudeType.NORMAL;
   private PictureBox pic;
   private Label lblTalk;
   private Dictionary<ImgState, Bitmap> imgMap;
@@ -42,7 +45,7 @@ public class Character {
   public Character(PictureBox pic, Label lblTalk) {
     this.pic = pic;
     this.lblTalk = lblTalk;
-    this.fortitude = FortitudeType.NORMAL;
+    this.fortitude = GetEnum();
   }
   #endregion
 
@@ -68,6 +71,41 @@ public class Character {
     c.Shutup();
     return c;
   }
+
+    /// <summary>
+    /// returns random enum for user. meant for start of game
+    /// </summary>
+    /// <returns></returns>
+    public static FortitudeType GetEnum()
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 101); // Generates a random number between 1 and 100 (inclusive)
+
+        if (randomNumber <= 10)
+        {
+            return FortitudeType.SCARED;
+        }
+        else if (randomNumber <= 30)
+        {
+            return FortitudeType.HOLY;
+        }
+        else if (randomNumber <= 50)
+        {
+            return FortitudeType.SHIFTY;
+        }
+        else if (randomNumber <= 70)
+        {
+            return FortitudeType.LUCKY;
+        }
+        else
+        {
+            return FortitudeType.NORMAL;
+        }
+    }
+
+    /// <summary>
+    /// meant to be called once per round
+    /// </summary>
 
   /// <summary>
   /// Create a player with the appropriate animations and dialog for the given weapon

@@ -7,6 +7,27 @@
 /// your game
 /// </summary>
 public enum FortitudeType {
+
+    /// <summary>
+    /// 
+    /// </summary>
+  HOLY,
+
+  /// <summary>
+  /// 
+  /// </summary>
+  SHIFTY,
+
+  /// <summary>
+  /// 
+  /// </summary>
+  LUCKY,
+
+  /// <summary>
+  /// 
+  /// </summary>
+  GAME_WON,
+
   /// <summary>
   /// Nothing special happens
   /// </summary>
